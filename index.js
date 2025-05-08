@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require('cors');
-//const routerApi = require('./routes');
+const routerApi = require('./routes');
 //const { checkApiKey } = require('./middlewares/auth.handler');
 
 // Middlewares error
@@ -33,7 +33,7 @@ app.get("/", (req, res) => {
   res.send("<h3>Hola, soy el servidor de la CI Banarica SA</h3>");
 });
 
-//routerApi(app);
+routerApi(app);
 
 //app.use(logErrors);
 //app.use(boomErrorHandler);
