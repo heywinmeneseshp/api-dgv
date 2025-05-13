@@ -30,7 +30,7 @@ app.use(cors()); // Acceso a todos los dominios
 //require('./utils/auth');
 
 app.get("/", (req, res) => {
-  res.send("<h3>Hola, soy el servidor de la CI Banarica SA</h3>");
+  res.send("<h3>Hola, soy el servidor de DGV</h3>");
 });
 
 routerApi(app);

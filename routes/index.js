@@ -1,7 +1,6 @@
 const express = require('express');
 
 // Importación de routers
-const pruebaRouter = require('./prueba.router');
 const tiposUsuariosRouter = require('./tipos_usuarios.routes');
 const usuariosRouter = require('./usuarios.routes');
 const tiposRouter = require('./tipos.routes');
@@ -24,9 +23,6 @@ const companiasRouter = require('./companias.routes');
 function routerApi(app) {
   const router = express.Router();
   app.use('/api/v1', router);
-
-  // Ruta de prueba
-  router.use('/prueba', pruebaRouter);
 
   // Rutas del sistema
   router.use('/tipos-usuarios', tiposUsuariosRouter);
