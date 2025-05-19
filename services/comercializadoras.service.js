@@ -1,5 +1,5 @@
 const boom = require('@hapi/boom');
-const { Op } = require('sequelize');
+const { Op, or } = require('sequelize');
 const db = require('../models');
 
 class ComercializadoraService {
@@ -25,6 +25,7 @@ class ComercializadoraService {
   }
 
   async update(id, changes) {
+    console.log('changes', changes);
     const comercializadora = await db.Comercializadora.findOne({ where: { id } });
     if (!comercializadora) {
       throw boom.notFound('La comercializadora no existe');
@@ -50,11 +51,17 @@ class ComercializadoraService {
         where: whereClause,
         limit: parseInt(limit),
         offset: parsedOffset,
+        order: [['id', 'DESC']],
       }),
       db.Comercializadora.count({ where: whereClause }),
     ]);
 
-    return { data: result, total };
+    return {
+      data: result,
+      total,
+      page: offset,
+      pages: Math.ceil(total / limit),
+    };
   }
 }
 

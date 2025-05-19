@@ -1,4 +1,5 @@
 const express = require('express');
+const { Op } = require('sequelize');
 const router = express.Router();
 const AgrupacionFincaService = require('../services/agrupacion_fincas.service');
 const agrupacionFincaService = new AgrupacionFincaService();
@@ -23,6 +24,28 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+
+router.get('/paginate', async (req, res, next) => {
+  try {
+    const {
+      offset = 1, limit = 10, grupo, habilitado = [true, false] } = req.query;
+
+    const whereClause = { habilitado };
+    // Filtro por estado "habilitado"
+
+
+    // Búsqueda parcial en "grupo"
+    if (grupo) {
+      whereClause.grupo = { [Op.like]: `%${grupo}%` }; // usa Op.iLike si usas PostgreSQL
+    }
+    const result = await agrupacionFincaService.paginate(offset, limit, whereClause);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
 // Obtener una agrupación de finca específica por ID
 router.get('/:id', async (req, res, next) => {
   try {
@@ -34,7 +57,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // Actualizar una agrupación de finca específica por ID
-router.put('/:id', async (req, res, next) => {
+router.patch('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const changes = req.body;
@@ -57,19 +80,6 @@ router.delete('/:id', async (req, res, next) => {
 });
 
 // Paginación de agrupaciones de finca
-router.get('/paginate', async (req, res, next) => {
-  const { offset = 1, limit = 10, grupo, habilitado } = req.query;
-  const whereClause = {};
 
-  if (grupo) whereClause.grupo = grupo;
-  if (habilitado !== undefined) whereClause.habilitado = habilitado === 'true'; // Convertimos el valor a booleano
-
-  try {
-    const result = await agrupacionFincaService.paginate(offset, limit, whereClause);
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
 
 module.exports = router;

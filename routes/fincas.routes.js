@@ -15,8 +15,11 @@ router.get('/', async (req, res, next) => {
 
 router.get('/paginate', async (req, res, next) => {
   try {
-    const { offset = 1, limit = 10 } = req.query;
-    const result = await service.paginate(offset, limit);
+    const { offset = 1, limit = 10, habilitado = [true, false] } = req.query;
+    const filters = {
+      habilitado
+    };
+    const result = await service.paginate(offset, limit, filters);
     res.json(result);
   } catch (error) {
     next(error);
